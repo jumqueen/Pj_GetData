@@ -18,12 +18,12 @@ jobs:
         env:
           FETCH_MODE: manual # 手動モード（現在時刻）
         run: |
-          export PYTHONPATH=$PYTHONPATH:$(pwd)/src
-          python src/fetch_btc.py
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/Src
+          python Src/fetch_btc.py
       - name: Commit and Push
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add data/*.csv
+          git add Data/*.csv
           git commit -m "Manual Update (Current Price)" || echo "No changes"
           git push
