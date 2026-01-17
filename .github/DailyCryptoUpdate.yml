@@ -1,0 +1,39 @@
+name: Crypto Data Daily Update
+
+on:
+  schedule:
+    # 日本時間 15:30 (UTC 06:30) に実行
+    - cron: '30 6 * * *'
+  workflow_dispatch: # 手動実行ボタンを有効化
+
+jobs:
+  run-python-script:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # GitHubへの書き込み権限
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run BTC fetcher
+        run: |
+          # srcディレクトリをパスに通して実行
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+          python src/fetch_btc.py
+
+      - name: Commit and Push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/*.csv
+          git commit -m "Update BTC price (15:00 JST): $(date +'%Y-%m-%d')" || echo "No changes to commit"
+          git push
