@@ -1,9 +1,7 @@
-name: Daily Crypto Update (15:30 Price)
+name: Manual Crypto Update (Current Price)
 
 on:
-  schedule:
-    # 毎日 16:00 JST (UTC 07:00) に実行
-    - cron: '0 7 * * *'
+  workflow_dispatch: # 手動実行ボタンのみ
 
 jobs:
   build:
@@ -18,7 +16,7 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Run Fetcher
         env:
-          FETCH_MODE: scheduled # 自動モード
+          FETCH_MODE: manual # 手動モード（現在時刻）
         run: |
           export PYTHONPATH=$PYTHONPATH:$(pwd)/src
           python src/fetch_btc.py
@@ -27,5 +25,5 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add data/*.csv
-          git commit -m "Daily Update (15:30 JST Price)" || echo "No changes"
+          git commit -m "Manual Update (Current Price)" || echo "No changes"
           git push
