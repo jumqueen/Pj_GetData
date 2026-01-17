@@ -1,0 +1,31 @@
+name: Daily Crypto Update (15:30 Price)
+
+on:
+  schedule:
+    # 毎日 16:00 JST (UTC 07:00) に実行
+    - cron: '0 7 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run: pip install -r requirements.txt
+      - name: Run Fetcher
+        env:
+          FETCH_MODE: scheduled # 自動モード
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+          python src/fetch_btc.py
+      - name: Commit and Push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/*.csv
+          git commit -m "Daily Update (15:30 JST Price)" || echo "No changes"
+          git push
