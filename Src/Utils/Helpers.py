@@ -15,8 +15,8 @@ def get_1530_jst_timestamp():
     return int(target_dt.timestamp())
 
 def save_to_csv(filename, data_row):
-    os.makedirs("data", exist_ok=True)
-    file_path = os.path.join("data", filename)
+    os.makedirs("Data", exist_ok=True)
+    file_path = os.path.join("Data", filename)
     file_exists = os.path.isfile(file_path)
     
     with open(file_path, mode='a', newline='') as f:
