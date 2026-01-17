@@ -19,7 +19,7 @@ jobs:
           FETCH_MODE: manual # 手動モード（現在時刻）
         run: |
           export PYTHONPATH=$PYTHONPATH:$(pwd)/Src
-          python Src/fetch_btc.py
+          python Src/FetchBtc.py
       - name: Commit and Push
         run: |
           git config --local user.email "action@github.com"
