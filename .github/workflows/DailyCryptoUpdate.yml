@@ -20,12 +20,12 @@ jobs:
         env:
           FETCH_MODE: scheduled # 自動モード
         run: |
-          export PYTHONPATH=$PYTHONPATH:$(pwd)/src
-          python src/fetch_btc.py
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/Src
+          python Src/FetchBtc.py
       - name: Commit and Push
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add data/*.csv
+          git add Data/*.csv
           git commit -m "Daily Update (15:30 JST Price)" || echo "No changes"
           git push
